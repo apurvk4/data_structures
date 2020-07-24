@@ -2,27 +2,21 @@
 #include<stdexcept>
 template<typename T>
 class doubly_linked_list{
-    protected:
-      T value;
-      doubly_linked_list *next=nullptr;
-      doubly_linked_list *prev=nullptr;
-      doubly_linked_list* head=nullptr;
-      doubly_linked_list * tail=nullptr;
     public:
       /**
-    returns const reference to the value stored in head pointer.
-    throws an instance of std::logic_error in case head pointer is null.
+    returns const reference to the value_ stored in head_ pointer.
+    throws an instance of std::logic_error in case head_ pointer is null.
       */
       const T & cfront();
       /**
-   returns read/write reference to the value stored in head pointer.
-   throws an instance of std::logic_error in case head pointer is null.
+   returns read/write reference to the value_ stored in head_ pointer.
+   throws an instance of std::logic_error in case head_ pointer is null.
     */
       T & front();
       const T & cback();
       /**
-   returns read/write reference to the value stored in tail pointer.
-   throws an instance of std::logic_error in case head pointer is null.
+   returns read/write reference to the value_ stored in tail_ pointer.
+   throws an instance of std::logic_error in case head_ pointer is null.
       */
       T & back();
       doubly_linked_list()=default;
@@ -40,35 +34,80 @@ class doubly_linked_list{
       void erase(doubly_linked_list *);
       void erase(T);
       ~doubly_linked_list();
+      class iterator{
+         private:
+           doubly_linked_list<T> * ptr_;
+         public:
+           iterator(doubly_linked_list<T> * ptr):ptr_{ptr}{
+           }
+           iterator operator++(int){
+              ptr_=ptr_->next_;
+              return *this;
+           }
+           iterator operator++(){
+              ptr_=ptr_->next_;
+              return *this;
+           }
+           const T & operator*(){
+               return this->ptr_->value_;
+           }
+           bool operator==(const iterator & rhs){
+               if(this->ptr_==rhs.ptr_){
+                   return true;
+               }else{
+                   return false;
+               }
+           }
+           bool operator !=(const iterator & rhs){
+               if(this->ptr_!=rhs.ptr_){
+                   return true;
+               }else{
+                   return false;
+               }
+           }
+           doubly_linked_list<T>* operator->(){
+               return this->ptr_;
+           }
+     };
+     iterator begin(){
+        return iterator(head_);
+     }
+     iterator end(){
+        return iterator(tail_->next_);
+    }
+    private:
+      T value_;
+      doubly_linked_list *next_=nullptr;
+      doubly_linked_list *prev_=nullptr;
+      doubly_linked_list* head_=nullptr;
+      doubly_linked_list * tail_=nullptr;
 };
 
 template<typename T>
 T & doubly_linked_list<T>::front(){
-   if(head==nullptr){throw std::logic_error("dereferencing a null pointer");}
-    return head->value;
+   if(head_==nullptr){throw std::logic_error("dereferencing a null pointer");}
+    return head_->value_;
 }
  
 template<typename T>
 const T & doubly_linked_list<T>::cfront(){
-    if(head==nullptr){throw std::logic_error("dereferencing a null pointer");}
-    const T & x= head->value;
-    return x;
+    if(head_==nullptr){throw std::logic_error("dereferencing a null pointer");}
+    return head_->value_;
 }
 
 template<typename T>
 T & doubly_linked_list<T>::back(){
-    if(tail==nullptr){throw std::logic_error("dereferencing a null pointer");}
-    return tail->value;
+    if(tail_==nullptr){throw std::logic_error("dereferencing a null pointer");}
+    return tail_->value_;
 }
 /*
-    returns const reference to the value stored in tail pointer.
-    throws an instance of std::logic_error in case head pointer is null.
+    returns const reference to the value_ stored in tail_ pointer.
+    throws an instance of std::logic_error in case head_ pointer is null.
 */
 template<typename T>
 const T & doubly_linked_list<T>::cback(){
-    if(tail==nullptr){throw std::logic_error("dereferencing a null pointer");}
-    const T & x=tail->value;
-    return x;
+    if(tail_==nullptr){throw std::logic_error("dereferencing a null pointer");}
+    return tail_->value_;
 }
 /*
   one args constructor
@@ -76,36 +115,36 @@ const T & doubly_linked_list<T>::cback(){
 template<typename T>
 doubly_linked_list<T>::doubly_linked_list(T val){
     doubly_linked_list *n= new doubly_linked_list<T>();
-    n->value=val;
-    if(head==nullptr && tail==nullptr){
-        head=n;
-        tail=head;
+    n->value_=val;
+    if(head_==nullptr && tail_==nullptr){
+        head_=n;
+        tail_=head_;
     }else{
-        tail->next=n;
-        n->prev=tail;
-        tail=n;
+        tail_->next_=n;
+        n->prev_=tail_;
+        tail_=n;
     }
 }
 /*
  Add the element to the end of doubly linked-list.
- @param__val : value to be inserted.
+ @param__val : value_ to be inserted.
 */
 template<typename T>
 void doubly_linked_list<T>::push_back(T val){
-   if(head==nullptr && tail==nullptr){
+   if(head_==nullptr && tail_==nullptr){
        doubly_linked_list * n= new doubly_linked_list<T>();
-       n->value=val;
-       head=n;
-       tail=n;
-       head->next=nullptr;
-       head->prev=nullptr;
+       n->value_=val;
+       head_=n;
+       tail_=n;
+       head_->next_=nullptr;
+       head_->prev_=nullptr;
    }else{
         doubly_linked_list * n= new doubly_linked_list<T>();
-        n->value=val;
-        tail->next=n;
-        n->prev=tail;
-        n->next=nullptr;
-        tail=n;
+        n->value_=val;
+        tail_->next_=n;
+        n->prev_=tail_;
+        n->next_=nullptr;
+        tail_=n;
    }
 }
 /*
@@ -113,37 +152,37 @@ removes element from end of doubly linked-list.
 */
 template<typename T>
 void doubly_linked_list<T>::pop_back(){
-   if(head==tail){
-      delete head;
-      head=nullptr;
-      tail=nullptr;
+   if(head_==tail_){
+      delete head_;
+      head_=nullptr;
+      tail_=nullptr;
    }else{
-       doubly_linked_list *ptr=tail->prev;
-       tail->prev=nullptr;
-       delete tail;
-       ptr->next=nullptr;
-       tail=ptr;
+       doubly_linked_list *ptr=tail_->prev_;
+       tail_->prev_=nullptr;
+       delete tail_;
+       ptr->next_=nullptr;
+       tail_=ptr;
    }
 }
 /*
 Adds element to the begining of doubly linked-list.
-@param__val: value to be inserted.
+@param__val: value_ to be inserted.
 */
 template<typename T>
 void doubly_linked_list<T>::push_front(T val){
-    if(head==nullptr && tail==nullptr){
+    if(head_==nullptr && tail_==nullptr){
         doubly_linked_list *ptr =new doubly_linked_list<T>();
-        ptr->value=val;
-        head=ptr;
-        tail=ptr;
-        head->next=nullptr;
-        head->prev=nullptr;
+        ptr->value_=val;
+        head_=ptr;
+        tail_=ptr;
+        head_->next_=nullptr;
+        head_->prev_=nullptr;
     }else{
         doubly_linked_list *ptr =new doubly_linked_list<T>();
-        ptr->value=val;
-        ptr->next=head;
-        ptr->prev=nullptr;
-        head=ptr;
+        ptr->value_=val;
+        ptr->next_=head_;
+        ptr->prev_=nullptr;
+        head_=ptr;
     }
 }
 /*
@@ -151,16 +190,16 @@ removes the element from begining of doubly linked-list.
 */
 template<typename T>
 void doubly_linked_list<T>::pop_front(){
-     if(head==tail){
-         delete head;
-         tail=nullptr;
-         head=nullptr;
+     if(head_==tail_){
+         delete head_;
+         tail_=nullptr;
+         head_=nullptr;
      }else{
-         doubly_linked_list * ptr=head->next;
-         head->next=nullptr;
-         ptr->prev=nullptr;
-         delete head;
-         head=ptr;
+         doubly_linked_list * ptr=head_->next_;
+         head_->next_=nullptr;
+         ptr->prev_=nullptr;
+         delete head_;
+         head_=ptr;
      }
 }
 /*
@@ -168,7 +207,7 @@ return true if list is empty else returns false.
 */
 template<typename T>
 bool doubly_linked_list<T>::empty(){
-    if(head==nullptr && tail==nullptr){
+    if(head_==nullptr && tail_==nullptr){
         return true;
     }else{
         return false;
@@ -179,21 +218,21 @@ clears the list
 */
 template<typename T>
 void doubly_linked_list<T>::clear(){
-    if(head !=nullptr && tail !=nullptr){
-        if(head==tail){
-            delete head;
-            tail=nullptr;
-            head=nullptr;
+    if(head_ !=nullptr && tail_ !=nullptr){
+        if(head_==tail_){
+            delete head_;
+            tail_=nullptr;
+            head_=nullptr;
         }else{
-            doubly_linked_list * ptr=head;
+            doubly_linked_list * ptr=head_;
             doubly_linked_list * ptr1=ptr;
             while(ptr !=nullptr){
-                ptr=ptr->next;
+                ptr=ptr->next_;
                 delete ptr1;
                 ptr1=ptr;
             }
-            head=nullptr;
-            tail=nullptr;
+            head_=nullptr;
+            tail_=nullptr;
         }
     }
 }
@@ -203,34 +242,34 @@ void doubly_linked_list<T>::clear(){
 template<typename T>
 void doubly_linked_list<T>::erase(doubly_linked_list<T> * ptr){
     if(ptr==nullptr){throw std::invalid_argument("Invalid node");}
-    if(head==tail){
-        if(head==ptr){
+    if(head_==tail_){
+        if(head_==ptr){
             delete ptr;
-            head=nullptr;
-            tail=nullptr;
+            head_=nullptr;
+            tail_=nullptr;
         }else{
             throw std::logic_error("not found");
         }
-    }else if(ptr==tail){
-            tail=tail->prev;
+    }else if(ptr==tail_){
+            tail_=tail_->prev_;
             delete ptr;
             ptr=nullptr;
-    }else if(ptr==head){
-            head=head->next;
+    }else if(ptr==head_){
+            head_=head_->next_;
             delete ptr;
             ptr=nullptr;
     }else{
-        doubly_linked_list * n=head;
+        doubly_linked_list * n=head_;
         while(n != nullptr){
             if(n==ptr){
                 break;
             }
-            n=n->next;
+            n=n->next_;
         }
         if(n==ptr){
-            n=ptr->prev;
-            n->next=ptr->next;
-            ptr->next->prev=n;
+            n=ptr->prev_;
+            n->next_=ptr->next_;
+            ptr->next_->prev_=n;
             delete ptr;
             ptr=nullptr;
         }else{
@@ -239,45 +278,44 @@ void doubly_linked_list<T>::erase(doubly_linked_list<T> * ptr){
     }
 }
 /*
-
 */
 template<typename T>
 void doubly_linked_list<T>::erase(T val){
- if(head !=nullptr && tail !=nullptr){
-    if(head==tail){
-        if(head->value==val){
-            delete head;
-            head=nullptr;
-            tail=nullptr;
+ if(head_ !=nullptr && tail_ !=nullptr){
+    if(head_==tail_){
+        if(head_->value_==val){
+            delete head_;
+            head_=nullptr;
+            tail_=nullptr;
         }else{
             throw std::logic_error("not found");
         }
-    }else if(head->value==val){
-        doubly_linked_list* p=head;
-        head=head->next;
+    }else if(head_->value_==val){
+        doubly_linked_list* p=head_;
+        head_=head_->next_;
         delete p;
         p=nullptr;
-    }else if(tail->value==val){
-        doubly_linked_list* p=tail;
-        tail=tail->prev;
+    }else if(tail_->value_==val){
+        doubly_linked_list* p=tail_;
+        tail_=tail_->prev_;
         delete p;
         p=nullptr;
     }else{
-        doubly_linked_list * n=head;
+        doubly_linked_list * n=head_;
         doubly_linked_list * ptr;
         while(n != nullptr){
-            if(n->value==val){
+            if(n->value_==val){
                 ptr=n;
                 break;
             }
-            n=n->next;
+            n=n->next_;
         }
         if(n==nullptr){
             throw std::logic_error("not found");
         }else{
-            n=ptr->prev;
-            n->next=ptr->next;
-            ptr->next->prev=n;
+            n=ptr->prev_;
+            n->next_=ptr->next_;
+            ptr->next_->prev_=n;
             delete ptr;
         }
     }
@@ -286,54 +324,52 @@ void doubly_linked_list<T>::erase(T val){
  }
 }
 /*
-
 */
 template<typename T>
 doubly_linked_list<T>::~doubly_linked_list(){
-    if(head==tail){
-        delete head;
-        head=nullptr;
-        tail=nullptr;
+    if(head_==tail_){
+        delete head_;
+        head_=nullptr;
+        tail_=nullptr;
     }else{
         doubly_linked_list *n1,*n2;
-        n1=head;
+        n1=head_;
         while(n1 !=nullptr ){
             n2=n1;
-            n1=n1->next;
+            n1=n1->next_;
             delete n2;
         }
     }
 }
 /*
-
 */
 template<typename T>
 void doubly_linked_list<T>::insert_after(doubly_linked_list<T> * ptr,T val){
     if(ptr==nullptr){throw std::invalid_argument("Invalid node");}
-    if(head !=nullptr && tail !=nullptr){
-          if(head==tail){
+    if(head_ !=nullptr && tail_ !=nullptr){
+          if(head_==tail_){
               doubly_linked_list * n=new doubly_linked_list<T>();
-              n->value=val;
-              head->next=n;
-              n->prev=head;
-              tail=n;
-          }else if(tail==ptr){
+              n->value_=val;
+              head_->next_=n;
+              n->prev_=head_;
+              tail_=n;
+          }else if(tail_==ptr){
                push_back(val);
           }else{
-              doubly_linked_list * n=head;
+              doubly_linked_list * n=head_;
               while(n != nullptr){
                   if(n==ptr){
                       break;
                     }
-                   n=n->next;
+                   n=n->next_;
                 }
               if(n==ptr){
                   doubly_linked_list* n1=new doubly_linked_list<T>();
-                  n1->value=val;
-                  n1->next=ptr->next;
-                  ptr->next->prev=n1;
-                  ptr->next=n1;
-                  n1->prev=ptr;
+                  n1->value_=val;
+                  n1->next_=ptr->next_;
+                  ptr->next_->prev_=n1;
+                  ptr->next_=n1;
+                  n1->prev_=ptr;
               }else{
                   throw std::logic_error("Provided Node not present");
               }
@@ -343,40 +379,39 @@ void doubly_linked_list<T>::insert_after(doubly_linked_list<T> * ptr,T val){
     }
 }
 /*
-
 */
 template<typename T>
 void doubly_linked_list<T>::insert_after(T p_val,T val){
-        if(head !=nullptr && tail !=nullptr){
-          if(head==tail){
-              if(head->value==p_val){
+        if(head_ !=nullptr && tail_ !=nullptr){
+          if(head_==tail_){
+              if(head_->value_==p_val){
                  doubly_linked_list * n=new doubly_linked_list<T>();
-                 n->value=val;
-                 head->next=n;
-                 n->prev=head;
-                 tail=n;
+                 n->value_=val;
+                 head_->next_=n;
+                 n->prev_=head_;
+                 tail_=n;
               }else{
                   throw std::logic_error("Provided value not present");
               }
-          }else if(tail->value==p_val){          
+          }else if(tail_->value_==p_val){          
               push_back(val);
           }else{
-              doubly_linked_list * n=head;
+              doubly_linked_list * n=head_;
               while(n != nullptr){
-                  if(n->value==p_val){
+                  if(n->value_==p_val){
                       break;
                     }
-                   n=n->next;
+                   n=n->next_;
                 }
               if(n==nullptr){
                   throw std::logic_error("Provided value not present");
               }else{
                   doubly_linked_list* n1=new doubly_linked_list<T>();
-                  n1->value=val;
-                  n1->next=n->next;
-                  n->next->prev=n1;
-                  n->next=n1;
-                  n1->prev=n;
+                  n1->value_=val;
+                  n1->next_=n->next_;
+                  n->next_->prev_=n1;
+                  n->next_=n1;
+                  n1->prev_=n;
               }
           }
     }else{
@@ -384,35 +419,34 @@ void doubly_linked_list<T>::insert_after(T p_val,T val){
     }
 }
 /*
-
 */
 template<typename T>
 void doubly_linked_list<T>::insert_before(doubly_linked_list<T>* ptr,T val){
     if(ptr==nullptr){throw std::invalid_argument("Invalid node");}
-     if(head !=nullptr && tail !=nullptr){
-           if(head==tail){
-               if(head==ptr){
+     if(head_ !=nullptr && tail_ !=nullptr){
+           if(head_==tail_){
+               if(head_==ptr){
                    push_front(val);
                }else{
                    throw std::logic_error("Provided Node not present");
                }
-           }else if(head==ptr){
+           }else if(head_==ptr){
                push_front(val);           
            }else{
-               doubly_linked_list * n=head;
+               doubly_linked_list * n=head_;
               while(n != nullptr){
                   if(n==ptr){
                       break;
                     }
-                   n=n->next;
+                   n=n->next_;
                 }
                 if(n==ptr){
                   doubly_linked_list* n1=new doubly_linked_list<T>();
-                  n1->value=val;
-                  n1->prev=tail->prev;
-                  tail->prev->next=n1;
-                  n1->next=tail;
-                  tail->prev=n1;
+                  n1->value_=val;
+                  n1->prev_=tail_->prev_;
+                  tail_->prev_->next_=n1;
+                  n1->next_=tail_;
+                  tail_->prev_=n1;
                 }else{
                     throw std::logic_error("Provided Node not present");
                 }   
@@ -422,40 +456,38 @@ void doubly_linked_list<T>::insert_before(doubly_linked_list<T>* ptr,T val){
      }       
 }
 /*
-
 */
 template<typename T>
 void doubly_linked_list<T>::insert_before(T P_val,T val){
-   if(head !=nullptr && tail !=nullptr){
-           if(head==tail){
-               if(head->value==P_val){
+   if(head_ !=nullptr && tail_ !=nullptr){
+           if(head_==tail_){
+               if(head_->value_==P_val){
                    push_front(val);
                }else{
                    throw std::logic_error("Provided value not present");
                }
-           }else if(head->value==P_val){
+           }else if(head_->value_==P_val){
                push_front(val);           
            }else{
-               doubly_linked_list * n=head;
+               doubly_linked_list * n=head_;
               while(n != nullptr){
-                  if(n->value==P_val){
+                  if(n->value_==P_val){
                       break;
                     }
-                   n=n->next;
+                   n=n->next_;
                 }
                 if(n==nullptr){
                     throw std::logic_error("Provided value not present");
                 }else{
                   doubly_linked_list* n1=new doubly_linked_list<T>();
-                  n1->value=val;
-                  n1->prev=tail->prev;
-                  tail->prev->next=n1;
-                  n1->next=tail;
-                  tail->prev=n1;
+                  n1->value_=val;
+                  n1->prev_=tail_->prev_;
+                  tail_->prev_->next_=n1;
+                  n1->next_=tail_;
+                  tail_->prev_=n1;
                 }   
            }
      }else{
          push_front(val);
      }
 }
-
