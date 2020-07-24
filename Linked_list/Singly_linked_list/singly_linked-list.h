@@ -2,62 +2,103 @@
 template<typename T>
  class linked_list
 {
-protected:
-    T value=0;
-    linked_list* next=nullptr;
-    linked_list* head=nullptr;
-    linked_list* tail=nullptr;
 public:
-    virtual T &  front();
-    virtual const T & cfront();
-    virtual T & back();
-    virtual const T & cback(); 
-    virtual void push_back(T);
-    virtual void pop_back();
-    virtual void push_front(T);
-    virtual bool empty();
-    virtual void pop_front();
+     T &  front();
+    const T & cfront();
+    T & back();
+    const T & cback(); 
+    void push_back(T);
+    void pop_back();
+    void push_front(T);
+    bool empty();
+    void pop_front();
     linked_list(T);
-    virtual void clear();
+    void clear();
     void remove(T);
     linked_list()=default;
-    virtual ~linked_list();
+    ~linked_list();
+     class iterator{
+         private:
+           linked_list<T> * ptr_;
+         public:
+           iterator(linked_list<T> * ptr):ptr_{ptr}{
+           }
+           iterator operator++(int){
+              ptr_=ptr_->next_;
+              return *this;
+           }
+           iterator operator++(){
+              ptr_=ptr_->next_;
+              return *this;
+           }
+           const T & operator*(){
+               return this->ptr_->value_;
+           }
+           bool operator==(const iterator & rhs){
+               if(this->ptr_==rhs.ptr_){
+                   return true;
+               }else{
+                   return false;
+               }
+           }
+           bool operator !=(const iterator & rhs){
+               if(this->ptr_!=rhs.ptr_){
+                   return true;
+               }else{
+                   return false;
+               }
+           }
+           linked_list<T>* operator->(){
+               return this->ptr_;
+           }
+     };
+     iterator begin(){
+        return iterator(head_);
+     }
+     iterator end(){
+        return iterator(tail_->next_);
+    }
+private:
+    T value_=0;
+    linked_list* next_=nullptr;
+    linked_list* head_=nullptr;
+    linked_list* tail_=nullptr;
 };
 template<typename T>
 T & linked_list<T>::front(){
-    return head->value;
+    return head_->value_;
 }
 template<typename T>
 const T & linked_list<T>::cfront(){
-    return head->value;
+    return head_->value_;
 }
 template<typename T>
 T & linked_list<T>::back(){
-    return tail->value;
+    return tail_->value_;
 }
 template<typename T>
 const T & linked_list<T>::cback(){
-    return tail->value;
+    return tail_->value_;
 }
 template<typename T>
 linked_list<T>::~linked_list(){
-    if(head==tail){
-        delete head;
-        head=nullptr;
-        tail=nullptr;
+    if(head_==tail_){
+        delete head_;
+        head_=nullptr;
+        tail_=nullptr;
     }else{
         linked_list *n1,*n2;
-        n1=head;
+        n1=head_;
         while(n1 !=nullptr ){
             n2=n1;
-            n1=n1->next;
+            n1=n1->next_;
             delete n2;
         }
     }
 }
 template<typename T>
 bool linked_list<T>::empty(){
-    if(head==nullptr){
+    if(head_==nullptr){
         return true;
     }else{
         return false;
@@ -65,17 +106,17 @@ bool linked_list<T>::empty(){
 }
 template<typename T>
 void linked_list<T>::clear(){
-  if(head !=nullptr && tail !=nullptr){
-    if(head==tail){
-        delete head;
-        head=nullptr;
-        tail=nullptr;
+  if(head_ !=nullptr && tail_ !=nullptr){
+    if(head_==tail_){
+        delete head_;
+        head_=nullptr;
+        tail_=nullptr;
     }else{
         linked_list *n1,*n2;
-        n1=head;
+        n1=head_;
         while(n1 !=nullptr ){
             n2=n1;
-            n1=n1->next;
+            n1=n1->next_;
             delete n2;
         }
     }
@@ -83,34 +124,34 @@ void linked_list<T>::clear(){
 }
 template<typename T>
 void linked_list<T>::remove(T val){
-    if(head !=nullptr && tail !=nullptr){
-        if(head==tail){
-            if(head->value==val){
-                delete head;
-                head=nullptr;
-                tail=nullptr;
+    if(head_ !=nullptr && tail_ !=nullptr){
+        if(head_==tail_){
+            if(head_->value_==val){
+                delete head_;
+                head_=nullptr;
+                tail_=nullptr;
             }
-        }else if(head->value==val){
-             linked_list * n=head;
-             head=head->next;
+        }else if(head_->value_==val){
+             linked_list * n=head_;
+             head_=head_->next_;
              delete n;
         }else{
             linked_list * temp;
-            temp=head;
-            while(temp->next->value!=val && temp->next !=tail){
-              temp=temp->next;
+            temp=head_;
+            while(temp->next_->value_!=val && temp->next_ !=tail_){
+              temp=temp->next_;
             }
-            if(temp->next->value==val ){
-                if(temp->next==tail){
-                    tail=temp;
-                    temp=temp->next;
+            if(temp->next_->value_==val ){
+                if(temp->next_==tail_){
+                    tail_=temp;
+                    temp=temp->next_;
                     delete temp;
-                    tail->next=nullptr;
+                    tail_->next_=nullptr;
                 }else{
-                    linked_list *n2=temp->next->next;
-                    linked_list *n1=temp->next;
-                     temp->next=n2;
-                     n1->next=nullptr;
+                    linked_list *n2=temp->next_->next_;
+                    linked_list *n1=temp->next_;
+                     temp->next_=n2;
+                     n1->next_=nullptr;
                      delete n1;
                 }
             }
@@ -121,69 +162,70 @@ template<typename T>
 linked_list<T>::linked_list(T val)
 {
   linked_list* n=new linked_list();
-  n->value=val;
-     head=n;
-     head->next=nullptr;
-     tail=head;
+  n->value_=val;
+     head_=n;
+     head_->next_=nullptr;
+     tail_=head_;
 }
 template<typename T>
 void linked_list<T>::push_back(T val){
-    if(head !=nullptr && tail !=nullptr){
+    if(head_ !=nullptr && tail_ !=nullptr){
                linked_list *n=new linked_list();
-               n->value=val;
-               n->next=nullptr;
-               tail=n;
+               n->value_=val;
+               n->next_=nullptr;
+               tail_->next_=n;
+               tail_=n;
     }else{
         linked_list * n=new linked_list();
-        n->value=val;
-        head=n;
-        head->next=nullptr;
-        tail= head;
+        n->value_=val;
+        head_=n;
+        head_->next_=nullptr;
+        tail_= head_;
     }
 }
 template<typename T>
 void linked_list<T>::pop_back(){
-    if(head !=nullptr && tail !=nullptr){
-       if(head==tail){
-           delete head;
-           head=nullptr;
-           tail=nullptr;
+    if(head_ !=nullptr && tail_ !=nullptr){
+       if(head_==tail_){
+           delete head_;
+           head_=nullptr;
+           tail_=nullptr;
         }else{
            linked_list * temp;
-           temp=head;
-           while(temp->next !=tail){
-              temp=temp->next;
+           temp=head_;
+           while(temp->next_ !=tail_){
+              temp=temp->next_;
             }
-            delete tail;
-            temp->next=nullptr;
-            tail=temp;
+            delete tail_;
+            temp->next_=nullptr;
+            tail_=temp;
         }
     }
 }
 template<typename T>
 void linked_list<T>::push_front(T val){
-    if(head==nullptr){
+    if(head_==nullptr){
        linked_list *n=new linked_list();
-       n->value=val;
-       n->next=nullptr;
-       head=n;
-       tail=n;
+       n->value_=val;
+       n->next_=nullptr;
+       head_=n;
+       tail_=n;
     }else{
         linked_list *n=new linked_list(val);
-        n->next=head;
-        head=n;
+        n->next_=head_;
+        head_=n;
     }
 }
 template<typename T>
 void linked_list<T>::pop_front(){
-    if(head !=nullptr && tail !=nullptr){
-        if(head==tail){
-          delete head;
-          head=nullptr;
-          tail=nullptr;
+    if(head_ !=nullptr && tail_ !=nullptr){
+        if(head_==tail_){
+          delete head_;
+          head_=nullptr;
+          tail_=nullptr;
         }else{
-          linked_list * n=head;
-          head=head->next;
+          linked_list * n=head_;
+          head_=head_->next_;
           delete n;
         }
     }
