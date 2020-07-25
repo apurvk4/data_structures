@@ -27,6 +27,18 @@ public:
               ptr_=ptr_->next_;
               return *this;
            }
+           iterator operator+=(int t){
+              while(t>0){
+                  ptr_=ptr_->next_;
+                  t--;
+              }
+              return *this;
+           }
+           void swap(iterator rhs){
+               T temp=this->ptr_->value_;
+               this->ptr_->value_=rhs.ptr_->value_;
+               rhs.ptr_->value_=temp;
+           }
            iterator operator++(){
               ptr_=ptr_->next_;
               return *this;
@@ -204,14 +216,15 @@ void linked_list<T>::pop_back(){
 }
 template<typename T>
 void linked_list<T>::push_front(T val){
-    if(head_==nullptr){
+    if(this->head_==nullptr){
        linked_list *n=new linked_list();
        n->value_=val;
        n->next_=nullptr;
-       head_=n;
-       tail_=n;
+       this->head_=n;
+       this->tail_=n;
     }else{
-        linked_list *n=new linked_list(val);
+        linked_list *n=new linked_list();
+        n->value_=val;
         n->next_=head_;
         head_=n;
     }
