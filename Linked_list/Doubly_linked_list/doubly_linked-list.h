@@ -173,7 +173,7 @@ removes element from end of doubly linked-list.
 */
 template<typename T>
 void doubly_linked_list<T>::pop_back(){
-    if(head_ !=nullptr && tail !=nullptr){
+    if(head_ !=nullptr && tail_ !=nullptr){
        if(head_==tail_){
             delete head_;
             head_=nullptr;
@@ -204,6 +204,7 @@ void doubly_linked_list<T>::push_front(T val){
         doubly_linked_list *ptr =new doubly_linked_list<T>();
         ptr->value_=val;
         ptr->next_=head_;
+        head_->prev_=ptr;
         ptr->prev_=nullptr;
         head_=ptr;
     }
@@ -361,7 +362,7 @@ void doubly_linked_list<T>::erase(T val){
 */
 template<typename T>
 void doubly_linked_list<T>::reverse(){
-    if(head_ !=nullptr && tail != nullptr){
+    if(head_ !=nullptr && tail_ != nullptr){
         if(head_ !=tail_){
             doubly_linked_list * n=head_;
             doubly_linked_list * n1=nullptr;
@@ -369,7 +370,7 @@ void doubly_linked_list<T>::reverse(){
                 n1=n->next_;
                 n->next_=n->prev_;
                 n->prev_=n1;
-                n=n->next_;
+                n=n->prev_;
             }
             n=head_;
             head_=tail_;
