@@ -5,8 +5,10 @@ class circular_linked_list{
      ~ circular_linked_list();
      circular_linked_list()=default;
      circular_linked_list(T);
-     void insert(T &);
+     void insert(T);
      void clear();
+     bool empty();
+     void reverse();
      void remove(T &);
      class iterator{
          private:
@@ -91,7 +93,7 @@ circular_linked_list<T>::circular_linked_list(T val){
     n->next_=head_;
 }
 template<typename T>
-void circular_linked_list<T>::insert(T & val){
+void circular_linked_list<T>::insert(T val){
        circular_linked_list * n=head_;
        while(n->next_ !=head_){
            n=n->next_;
@@ -151,4 +153,31 @@ void circular_linked_list<T>::remove(T & val){
        delete n1;
     }
 
+}
+template<typename T>
+bool circular_linked_list<T>::empty(){
+    if(head_==nullptr){
+        return true;
+    }else{
+        return false;
+    }
+}
+template<typename T>
+void circular_linked_list<T>::reverse(){
+    if(head_ !=nullptr){
+        if(head_->next_ != head_){
+          circular_linked_list * n=nullptr;
+          circular_linked_list *n1=head_;
+          circular_linked_list *n2=head_->next_;
+          n1->next_=nullptr;
+          while(n2 !=head_){
+              n=n1;
+              n1=n2;
+              n2=n2->next_;
+              n1->next_=n;
+          }
+          head_->next_=n1;
+          head_=n1;
+        }
+    }
 }
