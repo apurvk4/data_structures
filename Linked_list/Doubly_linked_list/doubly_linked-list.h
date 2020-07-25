@@ -21,6 +21,7 @@ class doubly_linked_list{
       void insert_before(T,T);
       void erase(doubly_linked_list *);
       void erase(T);
+      void reverse();
       ~doubly_linked_list();
       class iterator{
          private:
@@ -354,6 +355,27 @@ void doubly_linked_list<T>::erase(T val){
  }else{
      std::logic_error("not found");
  }
+}
+/*
+ It does what you think it does.
+*/
+template<typename T>
+void doubly_linked_list<T>::reverse(){
+    if(head_ !=nullptr && tail != nullptr){
+        if(head_ !=tail_){
+            doubly_linked_list * n=head_;
+            doubly_linked_list * n1=nullptr;
+            while(n != nullptr){
+                n1=n->next_;
+                n->next_=n->prev_;
+                n->prev_=n1;
+                n=n->next_;
+            }
+            n=head_;
+            head_=tail_;
+            tail_=n;
+        }
+    }
 }
 /*
 simple distructor . since we are using pointers internally so default constructor will cause lots of memory leaks.
