@@ -3,21 +3,9 @@
 template<typename T>
 class doubly_linked_list{
     public:
-      /**
-    returns const reference to the value_ stored in head_ pointer.
-    throws an instance of std::logic_error in case head_ pointer is null.
-      */
       const T & cfront();
-      /**
-   returns read/write reference to the value_ stored in head_ pointer.
-   throws an instance of std::logic_error in case head_ pointer is null.
-    */
       T & front();
       const T & cback();
-      /**
-   returns read/write reference to the value_ stored in tail_ pointer.
-   throws an instance of std::logic_error in case head_ pointer is null.
-      */
       T & back();
       doubly_linked_list()=default;
       doubly_linked_list(T);
@@ -47,6 +35,29 @@ class doubly_linked_list{
            iterator operator++(){
               ptr_=ptr_->next_;
               return *this;
+           }
+           iterator operator+=(int t){
+              while(t>0){
+                  ptr_=ptr_->next_;
+                  t--;
+              }
+              return *this;
+           }
+           iterator operator--(int){
+               ptr_=ptr_->prev_;
+               return *this;
+           }
+           iterator operator-=(int t){
+               while(t>0){
+                  ptr_=ptr_->prev_;
+                  t--;
+              }
+              return *this;
+           }
+           void swap(iterator rhs){
+               T temp= this->ptr_->value_;
+               this->ptr_->value_=rhs.ptr_->value_;
+               rhs.ptr_->value_=temp;
            }
            const T & operator*(){
                return this->ptr_->value_;
@@ -82,19 +93,28 @@ class doubly_linked_list{
       doubly_linked_list* head_=nullptr;
       doubly_linked_list * tail_=nullptr;
 };
-
+ /*
+   returns read/write reference to the value_ stored in head_ pointer.
+   throws an instance of std::logic_error in case head_ pointer is null.
+*/
 template<typename T>
 T & doubly_linked_list<T>::front(){
    if(head_==nullptr){throw std::logic_error("dereferencing a null pointer");}
     return head_->value_;
 }
- 
+/*
+    returns const reference to the value_ stored in head_ pointer.
+    throws an instance of std::logic_error in case head_ pointer is null.
+      */
 template<typename T>
 const T & doubly_linked_list<T>::cfront(){
     if(head_==nullptr){throw std::logic_error("dereferencing a null pointer");}
     return head_->value_;
 }
-
+/*
+   returns read/write reference to the value_ stored in tail_ pointer.
+   throws an instance of std::logic_error in case head_ pointer is null.
+*/
 template<typename T>
 T & doubly_linked_list<T>::back(){
     if(tail_==nullptr){throw std::logic_error("dereferencing a null pointer");}
@@ -152,17 +172,19 @@ removes element from end of doubly linked-list.
 */
 template<typename T>
 void doubly_linked_list<T>::pop_back(){
-   if(head_==tail_){
-      delete head_;
-      head_=nullptr;
-      tail_=nullptr;
-   }else{
-       doubly_linked_list *ptr=tail_->prev_;
-       tail_->prev_=nullptr;
-       delete tail_;
-       ptr->next_=nullptr;
-       tail_=ptr;
-   }
+    if(head_ !=nullptr && tail !=nullptr){
+       if(head_==tail_){
+            delete head_;
+            head_=nullptr;
+            tail_=nullptr;
+        }else{
+            doubly_linked_list *ptr=tail_->prev_;
+            tail_->prev_=nullptr;
+            delete tail_;
+            ptr->next_=nullptr;
+            tail_=ptr;
+        }
+    }
 }
 /*
 Adds element to the begining of doubly linked-list.
@@ -190,17 +212,19 @@ removes the element from begining of doubly linked-list.
 */
 template<typename T>
 void doubly_linked_list<T>::pop_front(){
-     if(head_==tail_){
-         delete head_;
-         tail_=nullptr;
-         head_=nullptr;
-     }else{
-         doubly_linked_list * ptr=head_->next_;
-         head_->next_=nullptr;
-         ptr->prev_=nullptr;
-         delete head_;
-         head_=ptr;
-     }
+    if(head_ !=nullptr && tail_ !=nullptr){
+       if(head_==tail_){
+           delete head_;
+           tail_=nullptr;
+           head_=nullptr;
+       }else{
+           doubly_linked_list * ptr=head_->next_;
+           head_->next_=nullptr;
+           ptr->prev_=nullptr;
+           delete head_;
+           head_=ptr;
+        }
+    }
 }
 /*
 return true if list is empty else returns false.
@@ -214,7 +238,7 @@ bool doubly_linked_list<T>::empty(){
     }
 }
 /*
-clears the list
+clears the list.
 */
 template<typename T>
 void doubly_linked_list<T>::clear(){
@@ -237,7 +261,10 @@ void doubly_linked_list<T>::clear(){
     }
 }
 /*
-  
+  simply erases a particular node if present.
+@param__ptr: node pointer to be erased.
+@return__: void 
+throws std::invalid_argument if provided Node is not present.
 */
 template<typename T>
 void doubly_linked_list<T>::erase(doubly_linked_list<T> * ptr){
@@ -278,6 +305,11 @@ void doubly_linked_list<T>::erase(doubly_linked_list<T> * ptr){
     }
 }
 /*
+simply erases a particular value if present and if same value is present 
+multiple times it will erase the first one from begining.
+@param__val: value to be erased
+@return__: void 
+throws std::logic_error if provided value is not present.
 */
 template<typename T>
 void doubly_linked_list<T>::erase(T val){
@@ -324,6 +356,7 @@ void doubly_linked_list<T>::erase(T val){
  }
 }
 /*
+simple distructor . since we are using pointers internally so default constructor will cause lots of memory leaks.
 */
 template<typename T>
 doubly_linked_list<T>::~doubly_linked_list(){
@@ -342,6 +375,12 @@ doubly_linked_list<T>::~doubly_linked_list(){
     }
 }
 /*
+It inserts a new node just after the provided node.
+@param__ptr: node after which new node is to be inserted.
+@param__val: value to be inserted in new node.
+@return__: void
+throws std::invalid_argument if provided_node is null.
+throws std::logic_error if provided node is not present in the list.
 */
 template<typename T>
 void doubly_linked_list<T>::insert_after(doubly_linked_list<T> * ptr,T val){
@@ -379,6 +418,12 @@ void doubly_linked_list<T>::insert_after(doubly_linked_list<T> * ptr,T val){
     }
 }
 /*
+It inserts a new node just after the provided value , if same value is present at multiple 
+locations then new node is inserted just after first occurance of that value.
+@param__ p_val: provided value after which new node is to be inserted.
+@param__ val: value to be inserted in new node.
+@return__: void
+throws std::logic_error if provided value is not present in the list.
 */
 template<typename T>
 void doubly_linked_list<T>::insert_after(T p_val,T val){
@@ -419,6 +464,12 @@ void doubly_linked_list<T>::insert_after(T p_val,T val){
     }
 }
 /*
+It inserts a new node just before the provided node.
+@param__ptr: node before which new node is to be inserted.
+@param__val: value to be inserted in new node.
+@return__: void
+throws std::invalid_argument if provided_node is null.
+throws std::logic_error if provided node is not present in the list.
 */
 template<typename T>
 void doubly_linked_list<T>::insert_before(doubly_linked_list<T>* ptr,T val){
@@ -456,6 +507,12 @@ void doubly_linked_list<T>::insert_before(doubly_linked_list<T>* ptr,T val){
      }       
 }
 /*
+It inserts a new node just before the provided node, if same value is present at multiple 
+locations then new node is inserted just before first occurance of that value.
+@param__ P_ptr: provided value before which new node is to be inserted.
+@param__ val: value to be inserted in new node.
+@return__: void
+throws std::logic_error if provided node is not present in the list.
 */
 template<typename T>
 void doubly_linked_list<T>::insert_before(T P_val,T val){

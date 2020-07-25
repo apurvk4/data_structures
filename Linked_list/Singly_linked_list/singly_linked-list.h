@@ -14,6 +14,7 @@ public:
     void pop_front();
     linked_list(T);
     void clear();
+    void reverse();
     void remove(T);
     linked_list()=default;
     ~linked_list();
@@ -133,6 +134,26 @@ void linked_list<T>::clear(){
         }
     }
   }
+}
+template<typename T>
+void linked_list<T>::reverse(){
+    if(head_ !=nullptr && tail_ !=nullptr){
+        if(head_ != tail_){
+          linked_list * n=nullptr;
+          linked_list *n1=head_;
+          linked_list *n2=head_->next_;
+          n1->next_=nullptr;
+          while(n2 !=nullptr){
+              n=n1;
+              n1=n2;
+              n2=n2->next_;
+              n1->next_=n;
+          }
+          n=head_;
+          head_=tail_;
+          tail_=n;
+        }
+    }
 }
 template<typename T>
 void linked_list<T>::remove(T val){
