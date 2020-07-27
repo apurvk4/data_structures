@@ -22,6 +22,9 @@ class doubly_linked_list{
       void erase(doubly_linked_list *);
       void erase(T);
       void reverse();
+      friend doubly_linked_list<T> * get_head(doubly_linked_list<T> & );
+      friend doubly_linked_list<T> * get_next(doubly_linked_list<T> & );
+      friend const T & get_value(doubly_linked_list<T>*);
       ~doubly_linked_list();
       class iterator{
          private:
@@ -167,6 +170,27 @@ void doubly_linked_list<T>::push_back(T val){
         n->next_=nullptr;
         tail_=n;
    }
+}
+/*
+returns head pointer.
+*/
+template<typename T>
+doubly_linked_list<T> * get_head(doubly_linked_list<T> & obj){
+    return obj.head_;
+}
+/*
+  returns next Node pointer to the provided Node pointer.
+*/
+template<typename T>
+doubly_linked_list<T> * get_next(doubly_linked_list<T> * ptr){
+    return ptr->next_;
+}
+/*
+returns the value at any given Node pointer
+*/
+template<typename T>
+doubly_linked_list<T> * get_value(doubly_linked_list<T> * ptr){
+    return ptr->value_;
 }
 /*
 removes element from end of doubly linked-list.
