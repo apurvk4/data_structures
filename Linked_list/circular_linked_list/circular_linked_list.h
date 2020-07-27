@@ -94,6 +94,7 @@ circular_linked_list<T>::circular_linked_list(T val){
 }
 template<typename T>
 void circular_linked_list<T>::insert(T val){
+       if(head_ !=nullptr){
        circular_linked_list * n=head_;
        while(n->next_ !=head_){
            n=n->next_;
@@ -102,6 +103,12 @@ void circular_linked_list<T>::insert(T val){
        n1->value_=val;
        n->next_=n1;
        n1->next_=head_;
+    }else{
+        circular_linked_list *n1=new circular_linked_list<T>();
+         n1->value_=val;
+         n1->next_=n1;
+         head_=n1;
+    }
 }
 template<typename T>
 void circular_linked_list<T>::clear(){
