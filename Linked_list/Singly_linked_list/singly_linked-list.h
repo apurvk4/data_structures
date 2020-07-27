@@ -17,9 +17,18 @@ public:
     void reverse();
     void remove(T);
     // void ReverseInGroups(int);
-    friend linked_list<T> * get_head(linked_list<T> & );
-    friend linked_list<T> * get_next(linked_list<T> * );
-    friend const T & get_value(linked_list<T> *);
+    friend linked_list<T> * get_head(linked_list<T> & obj){
+        return obj.head_;
+    }
+    friend linked_list<T> * get_next(linked_list<T> * ptr){
+          return ptr->next_;
+    }
+    friend void set_next(linked_list<T> * curr,linked_list<T> * nxt){
+        curr->next_=nxt;
+    }
+    friend const T & get_value(linked_list<T> *ptr){
+           return ptr->value_;
+    }
     linked_list()=default;
     ~linked_list();
      class iterator{
@@ -120,18 +129,6 @@ bool linked_list<T>::empty(){
     }else{
         return false;
     }
-}
-template<typename T>
-linked_list<T> * get_head(linked_list<T> & obj){
-  return obj.head_;
-}
-template<typename T>
-linked_list<T> * get_next(linked_list<T> * ptr){
-    return ptr->next_;
-}
-template<typename T>
-const T & get_value(linked_list<T> * ptr){
-    return ptr->value_;
 }
 template<typename T>
 void linked_list<T>::clear(){
