@@ -20,14 +20,23 @@ public:
     friend linked_list<T> * get_head(linked_list<T> & obj){
         return obj.head_;
     }
+    friend linked_list<T> * get_tail(linked_list<T> & obj){
+       return obj.tail_;
+    }
     friend linked_list<T> * get_next(linked_list<T> * ptr){
           return ptr->next_;
     }
     friend void set_next(linked_list<T> * curr,linked_list<T> * nxt){
         curr->next_=nxt;
     }
-    friend const T & get_value(linked_list<T> *ptr){
+    friend T & get_value(linked_list<T> *ptr){
            return ptr->value_;
+    }
+    friend void set_value(linked_list<T> * ptr,T val){
+        ptr->value_=val;
+    }
+    friend void set_tail(linked_list<T> * ptr){
+       ptr->tail_=ptr;
     }
     linked_list()=default;
     ~linked_list();
