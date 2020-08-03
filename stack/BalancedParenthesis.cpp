@@ -8,6 +8,7 @@ bool BalancedParenthesis(std::string & s){
            st.push(s[i]);
        }
        if(s[i]==')' || s[i]=='}' || s[i]==']'){
+           if(st.empty()){return false;}
            if(st.top()=='{' && s[i]=='}'){
              st.pop();
              continue;
