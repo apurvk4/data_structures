@@ -77,23 +77,17 @@ class Stack:public Node<T>{
    Stack()=default;
    ~Stack()=default;
    void push(T &);
-   void push(T);
    void pop();
    T & top();
    bool empty();
    unsigned int size();
   private:
+   T & get_data();
    unsigned int count=0;
 };
 template<typename T>
 void Stack<T>::push(T & val){
   this->push_back(val);
-  count++;
-}
-template<typename T>
-void Stack<T>::push(T val){
-  T v=val;
-  this->push_back(v);
   count++;
 }
 template<typename T>
@@ -111,7 +105,11 @@ unsigned int Stack<T>::size(){
 }
 template<typename T>
 bool Stack<T>::empty(){
-  return count;
+  if(count>0){
+    return false;
+  }else{
+    return true;
+  }
 }
 
 
