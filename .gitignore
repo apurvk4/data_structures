@@ -13,3 +13,4 @@ stack/.vscode/settings.json
 queue/.vscode/settings.json
 queue/a.out
 gg.txt
+queue/main.cpp
