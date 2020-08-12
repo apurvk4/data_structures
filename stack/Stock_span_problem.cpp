@@ -2,7 +2,7 @@
 #include<iostream>
 #include<vector>
 std::vector<int> stock_span(std::vector<int> & stock){
-  Stack<int> st;
+  stack<int> st;
   std::vector<int> out;
      out.push_back(1);
      for(int i=0;i<(int)(stock.size());i++){

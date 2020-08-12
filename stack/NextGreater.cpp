@@ -9,7 +9,7 @@ of every array elements.
 std::vector<int> NextGreater(std::vector<int> & in){
       std::vector<int> out((int)(in.size()));
       out[(int)(in.size())-1]=-1;
-      Stack<int> st;
+      stack<int> st;
       for(int i=(int)(in.size())-1;i>=0;i--){
           if(st.empty()){
               st.push(i);

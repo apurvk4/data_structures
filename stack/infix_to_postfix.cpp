@@ -35,7 +35,7 @@ int precedence(char pre,char nw){
     }
 }
 std::string infix_to_postfix(std::string & in){
-  Stack<char> op;
+  stack<char> op;
   std::string out;
   for (auto ch : in){
       if(find_operator(ch)==-1){

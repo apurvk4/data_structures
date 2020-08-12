@@ -7,7 +7,7 @@ find the closest (positive wise) greater on left of every element.
 #include "stack.h"
 #include<vector>
 std::vector<int> PreviousGreater(std::vector<int> in){
-   Stack<int> st;
+   stack<int> st;
    std::vector<int> out;
    out.push_back(-1);
    for(int i=0;i<(int)(in.size());i++){

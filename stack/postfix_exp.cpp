@@ -32,7 +32,7 @@ int  operate(int n1,int n2,int type){
     }
 }
 int evaluate_postfix(std::string & s){
-  Stack<int> st;
+  stack<int> st;
   for( char ch : s){
       if(find_operator(ch)==-1){
           std::stringstream str;

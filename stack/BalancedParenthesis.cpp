@@ -2,7 +2,7 @@
 #include<string>
 #include<iostream>
 bool BalancedParenthesis(std::string & s){
-    Stack<char> st;
+    stack<char> st;
      for(int i=0;i<(int)(s.size());i++){
        if(s[i]=='(' || s[i]=='{' || s[i]=='['){
            st.push(s[i]);
