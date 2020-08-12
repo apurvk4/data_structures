@@ -8,3 +8,8 @@ Linked_list/gg.txt
 stack/a.out
 stack/main.cpp
 stack/a.exe
+stack/.vscode/settings.json
+.gitignore
+queue/.vscode/settings.json
+queue/a.out
+gg.txt
