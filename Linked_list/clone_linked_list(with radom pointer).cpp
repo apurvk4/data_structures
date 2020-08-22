@@ -11,7 +11,6 @@ struct Node
     } 
 }; 
   
-// Utility function to print the list. 
 void print(Node *start) 
 { 
     Node *ptr = start; 

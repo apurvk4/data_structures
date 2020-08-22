@@ -9,10 +9,12 @@ class Node{
       Node * head_=nullptr;
       Node * tail_=nullptr;
       void push_back(T &);
+      void push_back(T &&);
       void pop_back();
       void pop_front();
       void reverse();
-      void push_front(T);
+      void push_front(T & );
+      void push_front(T &&);
       Node(T &);
       Node();
      ~Node();
@@ -22,6 +24,19 @@ class Node{
 };
 template<typename T>
 void Node<T>::push_back(T & val){
+  if(this->head_==nullptr){
+    Node * temp=new Node(val);
+    this->head_=temp;
+    this->tail_=temp;
+  }else{
+    Node * temp=new Node(val);
+    this->tail_->next_=temp;
+    temp->prev_=this->tail_;
+    this->tail_=temp;
+  }
+}
+template<typename T>
+void Node<T>::push_back(T && val){
   if(this->head_==nullptr){
     Node * temp=new Node(val);
     this->head_=temp;
@@ -90,7 +105,23 @@ Node<T>::~Node(){
   }
 }
 template<typename T>
-void Node<T>::push_front(T val){
+void Node<T>::push_front(T & val){
+    if(head_==nullptr && tail_==nullptr){
+        Node<T> *ptr =new Node<T>(val);
+        head_=ptr;
+        tail_=ptr;
+        head_->next_=nullptr;
+        head_->prev_=nullptr;
+    }else{
+        Node<T> *ptr =new Node<T>(val);
+        ptr->next_=head_;
+        head_->prev_=ptr;
+        ptr->prev_=nullptr;
+        head_=ptr;
+    }
+}
+template<typename T>
+void Node<T>::push_front(T && val){
     if(head_==nullptr && tail_==nullptr){
         Node<T> *ptr =new Node<T>(val);
         head_=ptr;
