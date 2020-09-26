@@ -168,19 +168,19 @@ class BST{
                 }
             }
         }
-        std::vector<int> verticalSum(){
-            std::unordered_map<int,int> mp;
-            int minKey=INT32_MAX;
-            int maxKey=INT32_MIN;
-            traverse(this->root,0,mp,minKey,maxKey);
-            std::vector<int> out;
-            for(int i=minKey;i<=maxKey;i++){
-                if(mp.find(i) != mp.end()){
-                    out.push_back(mp[i]);
-                }
-            }
-            return out;
-        }
+        // std::vector<int> verticalSum(){
+        //     std::unordered_map<int,int> mp;
+        //     int minKey=INT32_MAX;
+        //     int maxKey=INT32_MIN;
+        //     traverse(this->root,0,mp,minKey,maxKey);
+        //     std::vector<int> out;
+        //     for(int i=minKey;i<=maxKey;i++){
+        //         if(mp.find(i) != mp.end()){
+        //             out.push_back(mp[i]);
+        //         }
+        //     }
+        //     return out;
+        // }
         void clear(){
             distroy(this->root);
             this->root=nullptr;
